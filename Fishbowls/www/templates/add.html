@@ -1,0 +1,41 @@
+<ion-view view-title="Add Project">
+  <ion-content  ng-controller="AddCtrl">
+      <div class="list">
+        <div class="item item-input">
+    				<input type="text" ng-model="projectName" placeholder="Project Name">
+        </div>
+    				<ion-checkbox ng-model="isChecked">Delete after use</ion-checkbox>
+            <div class="row">
+              <button class="button button-small col text-center button-positive" ng-click="toggleReordering()">
+                Reorder
+              </button>
+          </div>
+        <div class="item">
+          <ion-list show-reorder="reordering">
+
+            <ion-item class=" item-icon-right" ng-repeat="x in project.tasks">
+              <p>{{x}}</p>
+              <i class="icon ion-close" style="font-size: 100%" ng-click="removeTask($index)"></i>
+              <ion-reorder-button class="ion-drag" on-reorder="move(x, $fromIndex, $toIndex)"></ion-reorder-button>
+            </ion-item>
+
+            <div class="item card item-input-inset">
+                <button class="button button-small button-positive" ng-click="addTask()">
+                  Add
+                </button>
+                <label class="item-input-wrapper">
+                  <input type="text" ng-model="addMe" placeholder="Task Description">
+                </label>
+
+            </div>
+          </ion-list>
+        </div>
+      </div>
+      <button class="button button-block button-positive" ng-click="save()">
+        Save All
+      </button>
+  </ion-content>
+  <ion-footer-bar class="bar-stable">
+
+  </ion-footer-bar>
+</ion-view>
