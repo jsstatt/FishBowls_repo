@@ -14,6 +14,11 @@ var projectArray = [];
 
   return {
 
+    list: function() {
+      return projectArray;
+    },
+
+
     create: function(pjt) {
       projectArray.push(pjt);
       console.log(projectArray);

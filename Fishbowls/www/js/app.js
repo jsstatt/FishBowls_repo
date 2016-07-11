@@ -8,15 +8,62 @@
 
     $stateProvider.state('home', {
       url: '/home',
-      templateUrl: 'templates/home.html'
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/home.html'
+        }
+      }
+    });
+
+    $stateProvider.state('list', {
+      url: '/list',
+      views: {
+        'tab-projects': {
+            templateUrl: 'templates/list.html'
+        }
+      }
     });
 
     $stateProvider.state('add', {
       url: '/add',
-      templateUrl: 'templates/add.html'
+      views: {
+        'tab-projects': {
+            templateUrl: 'templates/add.html'
+        }
+      }
     });
 
     $urlRouterProvider.otherwise('/home');
+
+  });
+
+  app.controller("ListCtrl", function($scope, ProjectStore) {
+
+    $scope.projects = ProjectStore.list();
+
+    $scope.setActive = function(x) {
+      for (var i = 0; i < projects.length(); i++) {
+        if (projects[i] === x) {
+          if (projects[i].active === true) {
+              projects[i].active = false;
+          } else {
+              projects[i].active = true;
+          }
+        }
+      }
+    };
+
+    $scope.getIcon = function(x) {
+      for (var i = 0; i < projects.length(); i++) {
+        if (projects[i] === x) {
+            if (projects[i].active === true) {
+              return 'ion-play';
+            } else {
+              return 'ion-pause';
+            }
+        }
+      }
+    };
 
   });
 
@@ -28,8 +75,9 @@
     $scope.project = {
         id: '',
         title: '',
-        tasks: ["TASK 1", "TASK 2", "TASK 3"],
-        useOnce: false
+        tasks: [],
+        useOnce: false,
+        active: false,
       };
 
     $scope.addTask = function () {
@@ -53,8 +101,9 @@
       $scope.project.id = new Date().getTime().toString();
       $scope.project.title = $scope.projectName;
       $scope.project.useOnce = $scope.isChecked;
+      $scope.project.active = true;
       ProjectStore.create($scope.project);
-      $state.go('home');
+      $state.go('list');
     };
 
   });

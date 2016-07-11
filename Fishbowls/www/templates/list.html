@@ -1,0 +1,15 @@
+<ion-view view-title="Projects">
+  <ion-content ng-controller="ListCtrl">
+    <div class="list">
+        <ion-item class="item-icon-right" ng-repeat="x in projects track by $index">
+            <h3>{{x.title}} </h3>
+            <p>{{x.tasks[0]}}, {{x.tasks[1]}}</p>
+            <i class="icon" ng-class="getIcon($index)" style="font-size: 200%" ng-click="setActive(x)"></i>
+        </ion-item>
+        <a href="#/add" class="item button button-block button-positive icon-right ion-plus" style="text-align:left">Add New</a>
+    </div>
+
+    Active Projects
+
+  </ion-content>
+</ion-view>
