@@ -24,13 +24,23 @@
       }
     });
 
-    $stateProvider.state('add', {
-      url: '/add',
-      views: {
-        'tab-projects': {
-            templateUrl: 'templates/add.html'
+      $stateProvider.state('add', {
+        url: '/add',
+        views: {
+          'tab-projects': {
+              templateUrl: 'templates/add.html'
+          }
         }
-      }
+    });
+
+        $stateProvider.state('edit', {
+          url: '/edit/:projectId',
+          views: {
+            'tab-projects': {
+                templateUrl: 'templates/edit.html'
+            }
+          }
+
     });
 
     $urlRouterProvider.otherwise('/home');
@@ -40,31 +50,19 @@
   app.controller("ListCtrl", function($scope, ProjectStore) {
 
     $scope.projects = ProjectStore.list();
+    $scope.activeState = '';
 
-    $scope.setActive = function(x) {
-      for (var i = 0; i < projects.length(); i++) {
-        if (projects[i] === x) {
-          if (projects[i].active === true) {
-              projects[i].active = false;
-          } else {
-              projects[i].active = true;
-          }
-        }
-      }
-    };
+    $scope.removeProject = function(projectId) {
+        ProjectStore.remove(projectId);
+    }
 
-    $scope.getIcon = function(x) {
-      for (var i = 0; i < projects.length(); i++) {
-        if (projects[i] === x) {
-            if (projects[i].active === true) {
-              return 'ion-play';
-            } else {
-              return 'ion-pause';
-            }
-        }
-      }
-    };
+    $scope.toggleActive = function(projectId) {
+        ProjectStore.toggleActive(projectId);
+    },
 
+    $scope.getActiveState = function(projectId, type) {
+        return ProjectStore.getActive(projectId, type);
+    }
   });
 
 
@@ -78,10 +76,21 @@
         tasks: [],
         useOnce: false,
         active: false,
+        icon: 'ion-pause'
       };
 
+      $scope.time = 0;
+
     $scope.addTask = function () {
-       $scope.project['tasks'].push($scope.addMe);
+      if ($scope.addMe !== null) {
+
+        var task = new Object();
+        task.title = $scope.addMe;
+        task.time = $scope.time;
+
+        $scope.project['tasks'].push(task);
+      }
+      $scope.addMe = null;
     };
 
     $scope.removeTask = function(x) {
@@ -102,7 +111,40 @@
       $scope.project.title = $scope.projectName;
       $scope.project.useOnce = $scope.isChecked;
       $scope.project.active = true;
+      $scope.project.icon = 'ion-play';
       ProjectStore.create($scope.project);
+      $state.go('list');
+    };
+
+  });
+
+
+  app.controller("EditCtrl", function($scope, $state, ProjectStore) {
+
+    $scope.project = angular.copy(ProjectStore.getProject($state.params.projectId));
+
+    $scope.addTask = function () {
+      if ($scope.addMe !== null) {
+        $scope.project['tasks'].push($scope.addMe);
+      }
+      $scope.addMe = null;
+    };
+
+    $scope.removeTask = function(x) {
+      $scope.project['tasks'].splice(x,1);
+    };
+
+    $scope.move = function(task, fromIndex, toIndex) {
+      $scope.project['tasks'].splice(fromIndex, 1);
+      $scope.project['tasks'].splice(toIndex, 0, task);
+    };
+
+    $scope.toggleReordering = function() {
+      $scope.reordering = !$scope.reordering;
+    };
+
+    $scope.save = function () {
+      ProjectStore.updateProject($scope.project);
       $state.go('list');
     };
 
