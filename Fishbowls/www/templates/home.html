@@ -1,15 +1,27 @@
 <ion-view view-title="fishBowls">
-  <ion-content class="padding" ng-controller="HomeCtrl" scroll="false">
+  <ion-content class="padding card-padding" ng-controller="HomeCtrl" scroll="false">
     <br>
-      <button class="button button-block button-light card animated bounceInDown" ng-class="clsAnimation" style="padding: 0" on-swipe-left="swipe()" on-swipe-right="swipe()">
+      <button class="button button-block button-light card animated bounceInDown" style="padding: 0" on-swipe-left="swipe()" on-swipe-right="swipe()">
           <div class="item item-divider item-dark" style="font-size: 150%">
             {{title}}
           </div>
           <div class="item item-text-wrap item-stable">
-            <br><br><br><br><br>
+            <br><br><br>
             <p style="font-size: 145%">{{description}}</p>
-            <br><br><br><br><br>
+            <br><br><br>
           </div>
     </button>
+    <div class="card padding item item-stable">
+      <div>
+        <div class="item range range-positive item-stable">
+          {{minutes+seconds}}<input type="range" ng-model="time" name="volume" min="0" max="{{max}}" value="{{minutes}}" step="1">{{max}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-40 text-center"><i class="icon ion-skip-backward big" ng-click="swipe();"></i></div>
+        <div class="col col-20 text-center"><i class="icon ion-play big" ng-click="startCounter()";></i></div>
+        <div class="col col-40 text-center"><i class="icon ion-skip-forward big" ng-click="swipe();""></i></div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

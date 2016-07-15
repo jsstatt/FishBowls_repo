@@ -2,7 +2,7 @@
   <ion-content ng-controller="ListCtrl">
     <ion-list>
         <ion-item class="item-icon-right item-remove-animate animated bounceInDown" href="#/edit/{{x.id}}" ng-repeat="x in projects track by x.id">
-              <h3>{{x.title}} </h3>
+              <h3>{{x.title}}</h3>
               <p>{{x.tasks[0].title}}, {{x.tasks[1].title}}, {{x.tasks[2].title}}</p>
               <i class="icon" ng-class="getActiveState(x.id, 'icon')"></i>
             <ion-option-button class="button-balanced" ng-click="toggleActive(x.id)">{{getActiveState(x.id, 'text')}}</ion-option-button>

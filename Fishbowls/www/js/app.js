@@ -154,35 +154,65 @@
   app.controller("HomeCtrl", function($scope, $state, ProjectStore) {
 
     $scope.projects = ProjectStore.list();
+    $scope.seconds = 0;
+    $scope.minutes = 0;
+    $scope.max = 5;
+    $scope.timeValue = $scope.minutes + $scope.seconds;
     $scope.title = 'Swipe For New Task';
     $scope.description = 'Swipe For New Task';
-    $scope.clsAnimation = '';
 
-    $scope.animateIn = function() {
-        $scope.clsAnimation = 'fadeInLeft';
-    }
 
-    $scope.animateBlank = function() {
-        $scope.clsAnimation = '';
-    }
+
 
     $scope.swipe = function () {
-
-      $scope.clsAnimation = "fadeOutRight"
 
       var selectedProject = $scope.projects[Math.floor(Math.random()*$scope.projects.length)];
       var selectedTask = selectedProject.tasks[Math.floor(Math.random()*selectedProject.tasks.length)];
 
       $scope.title = selectedProject.title;
       $scope.description = selectedTask.title;
-
-      setTimeout($scope.animateIn(), 12000);
-      setTimeout($scope.animateBlank(), 12000);
+      $scope.max = selectedTask.time;
+      $scope.seconds = 0;
+      $scope.minutes = 0;
 
     };
 
+    $scope.startCounter = function() {
+      var secs = 0;
+      var mins = 0;
+
+      var timerMinutes = setInterval(function(){
+      if (mins < $scope.max) {
+          mins++;
+          $scope.minutes = mins;
+      } else  if (mins >= $scope.max){
+          mins = $scope.max
+          $scope.minutes = $scope.max;
+          secs = 0;
+          $scope.seconds = .0;
+          return;
+      }
+      $scope.$apply();
+      }, 60000);
+
+      var timerSeconds = setInterval(function(){
+      if (mins < $scope.max){
+        if (secs < 60) {
+            secs++;
+            $scope.seconds = secs * 0.01;
+        } else {
+            secs = 0;;
+            $scope.seconds = 0;
+            return;
+        }
+      }
+      $scope.$apply();
+      }, 1000);
+
+    };
 
   });
+
 
 
   app.run(function($ionicPlatform) {
