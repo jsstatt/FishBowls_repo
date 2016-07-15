@@ -4,6 +4,8 @@
 
   var app = angular.module('fishbowls', ['ionic', 'fishbowls.projectstore']);
 
+
+
   app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
@@ -75,8 +77,7 @@
         title: '',
         tasks: [],
         useOnce: false,
-        active: false,
-        icon: 'ion-pause'
+        active: false
       };
 
       $scope.time = 0;
@@ -87,6 +88,7 @@
         var task = new Object();
         task.title = $scope.addMe;
         task.time = $scope.time;
+        task.finished = false;
 
         $scope.project['tasks'].push(task);
       }
@@ -111,7 +113,6 @@
       $scope.project.title = $scope.projectName;
       $scope.project.useOnce = $scope.isChecked;
       $scope.project.active = true;
-      $scope.project.icon = 'ion-play';
       ProjectStore.create($scope.project);
       $state.go('list');
     };
@@ -149,6 +150,40 @@
     };
 
   });
+
+  app.controller("HomeCtrl", function($scope, $state, ProjectStore) {
+
+    $scope.projects = ProjectStore.list();
+    $scope.title = 'Swipe For New Task';
+    $scope.description = 'Swipe For New Task';
+    $scope.clsAnimation = '';
+
+    $scope.animateIn = function() {
+        $scope.clsAnimation = 'fadeInLeft';
+    }
+
+    $scope.animateBlank = function() {
+        $scope.clsAnimation = '';
+    }
+
+    $scope.swipe = function () {
+
+      $scope.clsAnimation = "fadeOutRight"
+
+      var selectedProject = $scope.projects[Math.floor(Math.random()*$scope.projects.length)];
+      var selectedTask = selectedProject.tasks[Math.floor(Math.random()*selectedProject.tasks.length)];
+
+      $scope.title = selectedProject.title;
+      $scope.description = selectedTask.title;
+
+      setTimeout($scope.animateIn(), 12000);
+      setTimeout($scope.animateBlank(), 12000);
+
+    };
+
+
+  });
+
 
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
