@@ -71,6 +71,8 @@
   app.controller("AddCtrl", function($scope, $state, ProjectStore) {
 
     $scope.reordering = false;
+    $scope.moreOption = true;
+    $scope.moreTagText = 'More...';
 
     $scope.project = {
         id: '',
@@ -106,6 +108,18 @@
 
     $scope.toggleReordering = function() {
       $scope.reordering = !$scope.reordering;
+    };
+
+    $scope.toggleMoreOptions = function() {
+      $scope.moreOption = !$scope.moreOption;
+    };
+
+    $scope.getMoreTagText = function(){
+      if ($scope.moreOption === true) {
+        return 'Show More';
+      } else {
+        return 'Show Less';
+      }
     };
 
     $scope.save = function () {

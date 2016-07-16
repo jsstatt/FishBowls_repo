@@ -4,12 +4,24 @@
         <div class="item item-input">
     				<input type="text" ng-model="projectName" placeholder="Project Name">
         </div>
-    				<ion-checkbox ng-model="isChecked">Delete after use</ion-checkbox>
-            <div class="row">
-              <button class="button button-small col text-center button-positive" ng-click="toggleReordering()">
+    		<ion-checkbox ng-model="isChecked">Delete after use</ion-checkbox>
+        <div class="item text-right">
+          <a ng-click="toggleMoreOptions()">{{getMoreTagText()}}</a>
+        </div>
+        <div class="item" ng-hide="moreOption">
+          More options
+        </div>
+        <div class="item" ng-hide="moreOption">
+          More options
+        </div>
+        <div class="item" ng-hide="moreOption">
+          More options
+        </div>
+        <div class="row">
+            <button class="button button-small col text-center button-positive" ng-click="toggleReordering()">
                 Reorder
-              </button>
-          </div>
+            </button>
+        </div>
         <div class="item">
           <ion-list show-reorder="reordering">
 
