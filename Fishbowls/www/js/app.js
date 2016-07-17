@@ -170,12 +170,24 @@
     $scope.projects = ProjectStore.list();
     $scope.seconds = 0;
     $scope.minutes = 0;
-    $scope.max = 5;
+    $scope.max = 5 * 60000;
     $scope.timeValue = $scope.minutes + $scope.seconds;
     $scope.title = 'Swipe For New Task';
     $scope.description = 'Swipe For New Task';
+    $scope.timerGoing = false;
 
+    $scope.toggleTimer =function() {
+      $scope.timerGoing = !$scope.timerGoing;
+              console.log($scope.timerGoing);
+    };
 
+    $scope.getTimericon = function() {
+      if ($scope.timerGoing === false) {
+        return 'ion-play';
+      } else {
+        return 'ion-pause';
+      }
+    }
 
 
     $scope.swipe = function () {
@@ -185,45 +197,24 @@
 
       $scope.title = selectedProject.title;
       $scope.description = selectedTask.title;
-      $scope.max = selectedTask.time;
+      $scope.max = selectedTask.time*60000;
       $scope.seconds = 0;
       $scope.minutes = 0;
+      $scope.toggleTimer = false;
 
     };
 
     $scope.startCounter = function() {
-      var secs = 0;
-      var mins = 0;
-
-      var timerMinutes = setInterval(function(){
-      if (mins < $scope.max) {
-          mins++;
-          $scope.minutes = mins;
-      } else  if (mins >= $scope.max){
-          mins = $scope.max
-          $scope.minutes = $scope.max;
-          secs = 0;
-          $scope.seconds = .0;
-          return;
-      }
-      $scope.$apply();
-      }, 60000);
-
       var timerSeconds = setInterval(function(){
-      if (mins < $scope.max){
-        if (secs < 60) {
-            secs++;
-            $scope.seconds = secs * 0.01;
-        } else {
-            secs = 0;;
-            $scope.seconds = 0;
-            return;
-        }
-      }
-      $scope.$apply();
+        $scope.seconds+=1000;
+            $scope.$apply();
       }, 1000);
 
-    };
+      if ($scope.timerGoing === false) {
+        clearInterval(timerSeconds);
+      }
+
+    }
 
   });
 
