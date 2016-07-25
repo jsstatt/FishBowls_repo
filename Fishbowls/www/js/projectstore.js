@@ -54,7 +54,16 @@ angular.module('fishbowls.projectstore', [])
     toggleActive: function(projectId) {
       for (var i = 0; i < projectArray.length; i++) {
         if (projectArray[i].id === projectId) {
-          projectArray[i].active = !projectArray[i].active;
+          if (projectArray[i].active === false) {
+              projectArray[i].active = true;
+              for (var j = 0; j < projectArray[i].tasks.length; j ++) {
+                projectArray[i].tasks[j].finished = false;
+              }
+          } else {
+              projectArray[i].active = false;
+          }
+
+
           persist();
           return;
         }

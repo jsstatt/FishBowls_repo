@@ -1,10 +1,13 @@
 <ion-view view-title="Projects">
   <ion-content ng-controller="ListCtrl">
     <ion-list>
-        <ion-item class="item-icon-right item-remove-animate animated bounceInDown" href="#/edit/{{x.id}}" ng-repeat="x in projects track by x.id">
-              <h3>{{x.title}}</h3>
+        <ion-item class="item-icon-right item-remove-animate animated bounceInDown"
+        href="#/edit/{{x.id}}" ng-repeat="x in projects track by x.id">
+            <div class="padding">
+              <h2>{{x.title}}</h2>
               <p>{{x.tasks[0].title}}, {{x.tasks[1].title}}, {{x.tasks[2].title}}</p>
               <i class="icon" ng-class="getActiveState(x.id, 'icon')"></i>
+            </div>
             <ion-option-button class="button-balanced" ng-click="toggleActive(x.id)">{{getActiveState(x.id, 'text')}}</ion-option-button>
             <ion-option-button class="button-assertive icon-left ion-trash-b" ng-click="removeProject(x.id)">Delete</ion-option-button>
         </ion-item>

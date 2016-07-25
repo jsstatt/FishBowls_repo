@@ -2,7 +2,7 @@
   <ion-content ng-controller="AddCtrl">
       <div class="list">
         <div class="item item-input">
-    				<input type="text" ng-model="projectName" placeholder="Project Name">
+    				<input type="text" style="font-size:100%" ng-model="projectName" placeholder="Project Name">
         </div>
     		<ion-checkbox ng-model="isChecked">Delete after use</ion-checkbox>
         <div class="item text-right">
@@ -39,9 +39,9 @@
             </ion-item>
 
             <div class="item card">
-                  <input type="text" ng-model="addMe" placeholder="Task Description">
+                  <input type="text" style="font-size:100%" ng-model="addMe" placeholder="Task Description">
                   <div class="item range range-positive">
-                      Expected Time:<input type="range" ng-model="time" name="volume" min="0" max="60" value="0">{{time}} Min
+                      Time:<input type="range" ng-model="time" name="volume" min="0" max="60" value="0">{{time}} Min
                   </div>
                   <button class="button button-block button-positive" ng-click="addTask()">
                     Add

@@ -140,7 +140,13 @@
 
     $scope.addTask = function () {
       if ($scope.addMe !== null) {
-        $scope.project['tasks'].push($scope.addMe);
+
+        var task = new Object();
+        task.title = $scope.addMe;
+        task.time = $scope.time;
+        task.finished = false;
+
+        $scope.project['tasks'].push(task);
       }
       $scope.addMe = null;
     };
@@ -168,53 +174,93 @@
   app.controller("HomeCtrl", function($scope, $state, ProjectStore) {
 
     $scope.projects = ProjectStore.list();
+    $scope.pjtTitle = 'Swipe For New Task';
+    $scope.tskDescription = 'Swipe For New Task';
+    $scope.time = 0;
     $scope.seconds = 0;
     $scope.minutes = 0;
-    $scope.max = 5 * 60000;
-    $scope.timeValue = $scope.minutes + $scope.seconds;
-    $scope.title = 'Swipe For New Task';
-    $scope.description = 'Swipe For New Task';
-    $scope.timerGoing = false;
+    $scope.tskMax = 5 * 60000;
+    $scope.timerRunning = true;
+    $scope.lastOne = 0;
 
-    $scope.toggleTimer =function() {
-      $scope.timerGoing = !$scope.timerGoing;
-              console.log($scope.timerGoing);
-    };
 
     $scope.getTimericon = function() {
-      if ($scope.timerGoing === false) {
+      if ($scope.timerGoing === 0) {
         return 'ion-play';
       } else {
         return 'ion-pause';
       }
     }
 
-
     $scope.swipe = function () {
 
-      var selectedProject = $scope.projects[Math.floor(Math.random()*$scope.projects.length)];
-      var selectedTask = selectedProject.tasks[Math.floor(Math.random()*selectedProject.tasks.length)];
+      var filtered = [];
+      var selectedProject = '';
+      var selectedTask = '';
 
-      $scope.title = selectedProject.title;
-      $scope.description = selectedTask.title;
-      $scope.max = selectedTask.time*60000;
-      $scope.seconds = 0;
-      $scope.minutes = 0;
-      $scope.toggleTimer = false;
+      if ($scope.projects.length > 0) {
 
+        for (var i = 0; i < $scope.projects.length; i++) {
+          if ($scope.projects[i].active === true) {
+            filtered.push($scope.projects[i]);
+          }
+        }
+
+        if (filtered.length > 0) {
+          selectedProject = filtered[Math.floor(Math.random()*filtered.length)];
+          $scope.pjtTitle = selectedProject.title;
+
+          if (selectedProject.tasks.length > 0){
+            for (var i = 0; i < selectedProject.tasks.length; i++) {
+              if (selectedProject.tasks[i].finished === false) {
+                selectedTask = selectedProject.tasks[i];
+                $scope.tskDescription = selectedTask.title;
+                $scope.tskMax = selectedTask.time*60000;
+                selectedProject.tasks[i].finished = true;
+                var last = selectedProject.tasks.length;
+
+                if (selectedProject.tasks[last-1].finished == true) {
+                  selectedProject.active = false;
+                  if (selectedProject.useOnce === true) {
+                    ProjectStore.remove(selectedProject.id);
+                  }
+                }
+
+                return;
+              }
+            }
+          }
+
+
+
+          $scope.seconds = 0;
+          $scope.minutes = 0;
+          $scope.toggleTimer = 0;
+        } else if (filtered == 0) {
+          $scope.pjtTitle = 'All Finished';
+          $scope.tskDescription = 'Great Job! You are all finished for now';
+        }
+      }
     };
 
-    $scope.startCounter = function() {
-      var timerSeconds = setInterval(function(){
-        $scope.seconds+=1000;
-            $scope.$apply();
-      }, 1000);
 
-      if ($scope.timerGoing === false) {
-        clearInterval(timerSeconds);
-      }
 
-    }
+      $scope.startTimer = function (){
+          $scope.$broadcast('timer-start');
+          $scope.timerRunning = true;
+      };
+
+      $scope.stopTimer = function (){
+          $scope.$broadcast('timer-stop');
+          $scope.timerRunning = false;
+      };
+
+      $scope.$on('timer-stopped', function (event, data){
+          console.log('Timer Stopped - data = ', data);
+      });
+
+
+
 
   });
 
