@@ -1,17 +1,26 @@
 <ion-view view-title="Projects">
+  <ion-nav-buttons side="secondary">
+     <a class="button button-clear icon ion-plus" href="#/add"></a>
+   </ion-nav-buttons>
   <ion-content ng-controller="ListCtrl">
+    <div class="item item-stable" ng-hide="hideCheckboxes" style="padding:3px">
+      <a class="button button-positive" ng-click="closeCheckboxes()">Back</a>
+      <a class="button button-positive" ng-click="deleteCheckItems();closeCheckboxes();">Delete</a>
+      <a class="button button-positive" ng-click="addTodoItems();closeCheckboxes();">Add to Todo</a>
+    </div>
     <ion-list>
-        <ion-item class="item-icon-right item-remove-animate animated bounceInDown"
-        href="#/edit/{{x.id}}" ng-repeat="x in projects track by x.id">
-            <div class="padding">
+        <ion-item class="item-icon-right item-remove-animate"
+        href="#/edit/{{x.id}}" ng-repeat="x in projects | orderBy : 'title' track by x.id"
+        on-hold="showCheckboxes()" ng-hide="hideItem">
+            <div class=" row nopadding">
               <h2>{{x.title}}</h2>
-              <p>{{x.tasks[0].title}}, {{x.tasks[1].title}}, {{x.tasks[2].title}}</p>
-              <i class="icon" ng-class="getActiveState(x.id, 'icon')"></i>
             </div>
-            <ion-option-button class="button-balanced" ng-click="toggleActive(x.id)">{{getActiveState(x.id, 'text')}}</ion-option-button>
-            <ion-option-button class="button-assertive icon-left ion-trash-b" ng-click="removeProject(x.id)">Delete</ion-option-button>
         </ion-item>
-        <a href="#/add" class="item button button-block button-positive icon-right ion-plus animated bounceInDown" style="text-align:left">Add New</a>
+        <ion-checkbox ng-repeat="x in projects | orderBy : 'title' track by x.id" ng-hide="hideCheckboxes" ng-model="x.onTodo">
+            <div class="nopadding">
+              <h2>{{x.title}}</h2>
+            </div>
+        </ion-checkbox>
     </ion-list>
   </ion-content>
 </ion-view>

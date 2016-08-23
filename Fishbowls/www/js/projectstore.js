@@ -8,13 +8,38 @@ angular.module('fishbowls.projectstore', [])
     window.localStorage['projectArray'] = angular.toJson(projectArray);
   }
 
+  var todoArray = angular.fromJson(window.localStorage['todoArray'] || '[]');
+
+  function persistTodo() {
+    window.localStorage['todoArray'] = angular.toJson(todoArray);
+  }
+
+  var settings = {
+    maxSlider: 30,
+    deleteAfter: false,
+    playInOrder: true,
+    vibrate: true,
+    sound: false
+  }
+
+  if (JSON.parse(localStorage.getItem('settingsStorage')) === null) {
+    localStorage.setItem('settingsStorage', JSON.stringify(settings));
+  }
+
+
+  settingsObject =  JSON.parse(localStorage.getItem('settingsStorage'));
+
+  function persistSettings(set) {
+    console.log(set);
+    localStorage.setItem('settingsStorage', JSON.stringify(set));
+  }
+
+
 
   return {
 
-
-    create: function(pjt) {
-      projectArray.push(pjt);
-      console.log(projectArray);
+    create: function(project) {
+      projectArray.push(project);
       persist();
     },
 
@@ -51,45 +76,71 @@ angular.module('fishbowls.projectstore', [])
       }
     },
 
+    removeProjects: function(projects) {
+      for (var i = 0; i < projects.length; i++) {
+        for (var j = 0; j < projectArray.length; j++) {
+          if (projects[i].id === projectArray[j].id) {
+            projectArray.splice(j,1);
+          }
+        }
+      }
+      persist();
+    },
+
     toggleActive: function(projectId) {
       for (var i = 0; i < projectArray.length; i++) {
         if (projectArray[i].id === projectId) {
           if (projectArray[i].active === false) {
               projectArray[i].active = true;
-              for (var j = 0; j < projectArray[i].tasks.length; j ++) {
-                projectArray[i].tasks[j].finished = false;
-              }
           } else {
               projectArray[i].active = false;
           }
-
-
           persist();
           return;
         }
       }
     },
 
-    getActive: function(projectId, type) {
-      for (var i = 0; i < projectArray.length; i++) {
-        if (projectArray[i].id === projectId) {
-          if (projectArray[i].active === true) {
-            if (type == 'text') {
-              return 'Deactivate';
-            }
-            if (type == 'icon') {
-              return 'ion-play';
-            }
-          } else {
-            if (type == 'text') {
-              return 'Activate';
-            }
-            if (type == 'icon') {
-              return 'ion-pause';
-            }
-          }
+
+    addTodoItems: function(projects) {
+      for (var i = 0; i < projects.length; i++) {
+        projects[i].active = true;
+        todoArray.push(projects[i]);
+        persistTodo();
+      }
+    },
+
+    listTodo: function() {
+      return todoArray;
+    },
+
+    updateTodo: function(project) {
+      for (var i = 0; i < todoArray.length; i++) {
+        if (todoArray[i].id === project.id) {
+          todoArray[i] = project;
+          persistTodo();
+          return;
         }
       }
+    },
+
+    removeTodoItem: function(project) {
+      for (var i = 0; i < todoArray.length; i++) {
+        if (todoArray[i].id === project.id) {
+          todoArray[i].onTodo = false;
+          todoArray[i].active = false;
+          todoArray.splice(i,1);
+          persistTodo();
+        }
+      }
+    },
+
+    listSettings: function() {
+      return settingsObject;
+    },
+
+    updateSettings: function(clsSetting) {
+      persistSettings(clsSetting);
     }
 
   };

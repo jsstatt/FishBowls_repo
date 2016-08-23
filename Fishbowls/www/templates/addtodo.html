@@ -1,0 +1,14 @@
+<ion-view view-title="Projects" ng-controller="AddTodoCtrl">
+  <ion-nav-buttons side="secondary">
+     <button class="button button-clear" ng-click="addTodoItems()">Add</button>
+   </ion-nav-buttons>
+  <ion-content>
+   <ion-list>
+     <ion-checkbox ng-repeat="x in projects | orderBy : 'title' track by x.id" ng-model="x.onTodo">
+        <div class="nopadding">
+          <h2>{{x.title}}</h2>
+        </div>
+      </ion-checkbox>
+    </ion-list>
+  </ion-content>
+</ion-view

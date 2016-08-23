@@ -1,0 +1,13 @@
+<ion-list>
+  <label class="item item-input">
+    <input type="text" style="font-size:100%" ng-model="data.addMe" placeholder="Task Description">
+  </label>
+
+  <div class="item range range-positive">
+      Time:<input type="range" ng-model="data.time" name="volume" min="0" max="{{settings.maxSlider}}" value="0">{{data.time}} Min
+  </div>
+
+  <ion-radio ng-model="data.choice" ng-value="'this'">This Project</ion-radio>
+  <ion-radio ng-model="data.choice" ng-value="'misc'">miscellaneous</ion-radio>
+
+</ion-list>

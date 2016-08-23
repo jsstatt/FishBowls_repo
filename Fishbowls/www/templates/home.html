@@ -1,29 +1,36 @@
 <ion-view view-title="FishBowls">
-  <ion-content class="padding card-padding" ng-controller="HomeCtrl" onload="alertMe();" scroll="false">
-      <button class="button button-block button-light card animated bounceInDown"
-       style="padding: 0" on-swipe-left="swipe()" on-swipe-right="swipe()">
-          <div class="item item-divider item-dark" style="font-size: 150%">
-            {{pjtTitle}}
-          </div>
-          <div class="item item-text-wrap item-stable">
-            <br><br>
-            <p style="font-size: 145%">{{tskDescription}}</p>
-            <br><br>
-            <div class="item range range-positive item-stable">
-              {{minutes | date : 'mm'}}:{{seconds | date : 'ss'}} <input type="range"
-               ng-model="time" name="volume" min="0" max="{{max}}" value="{{minutes}}" step="1">
-              {{taskMax | date : 'mm'}}:00
-            </div>
-          </div>
-    </button>
-
+  <ion-nav-buttons side="secondary">
+     <a class="icon ion-android-more-vertical button button-clear" href="#/settings"> </a>
+   </ion-nav-buttons>
+  <ion-content class="padding card-padding" ng-controller="HomeCtrl" scroll="false">
+    <div class=" button-block button-light card"
+     style="padding: 0">
+      <div class="item item-divider item-dark icon-right padding text-center" style="font-size: 200%">
+        {{pjtTitle}}
+      </div>
+      <div class="item item-text-wrap item-stable text-center">
+        <br><br><br>
+        <p style="font-size: 160%"> {{tskDescription}}</p>
+        <br><br>
+        <div class="item range range-positive item-stable">
+          {{minutes | date : 'mm'}}:{{seconds | date : 'ss'}} <input type="range"
+           ng-model="time" name="volume" min="0" max="{{max}}" value="{{minutes}}" step="1">
+          {{tskMax | date : 'mm'}}:00
+        </div>
+        <br>
+        <div class="text-center"><i class="icon big"
+          ng-class="getTimericon()" ng-click="toggleTimer()"></i>
+        </div>
+      </div>
     </div>
     <div class="bar bar-footer bar-stable" style="padding-top:0">
       <div class="row">
-        <div class="col col-40 text-center"><i class="icon ion-skip-backward big" ng-click="swipe();"></i></div>
-        <div id="startPause" class="col col-20 text-center"><i class="icon big"
-          ng-class="getTimericon()" ng-click="startPause();getStartingText();"></i></div>
-        <div class="col col-40 text-center"><i class="icon ion-skip-forward big" ng-click="swipe();"></i></div>
+        <div class="col col-20 text-center"><i class="icon ion-skip-backward big" ng-click="skipTask()"></i></div>
+        <div class="col col-20 text-center"><i class="icon" style="font-size:175%" ng-class="lockIcon"
+          ng-click="toggleLock()"></i></div>
+        <div class="col col-20 text-center"><i class="icon ion-plus big" ng-click="addNewTask()"></i></div>
+        <div class="col col-20 text-center"><i class="icon ion-forward big" ng-click="skipTask()"></i></div>
+        <div class="col col-20 text-center"><i class="icon ion-skip-forward big" ng-click="finish();skipTask();"></i></div>
       </div>
     </div>
   </ion-content>

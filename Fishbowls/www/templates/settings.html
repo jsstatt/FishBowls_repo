@@ -1,0 +1,65 @@
+<ion-view view-title="Settings">
+  <ion-content class="padding card-padding" ng-controller="SettingsCtrl" scroll="false">
+    <div class="card">
+      <div class="item item-divider item-dark">
+        Editing
+      </div>
+      <ion-list>
+        <ion-item>
+          <div class="row">
+            <div class="col col-70">
+              Max timer limit
+            </div>
+            <div class="col col-30">
+              <input class="item" type="number" ng-model="settings.maxSlider"></input>
+            </div>
+          </div>
+        </ion-item>
+        <div class="item item-toggle">
+          Delete after use default
+          <label class="toggle">
+            <input type="checkbox" ng-model="settings.deleteAfter">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </div>
+        <div class="item item-toggle">
+          Play in order default
+          <label class="toggle">
+            <input type="checkbox" ng-model="settings.playInOrder">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </div>
+      </ion-list>
+    </div>
+    <div class="card">
+      <div class="item item-divider item-dark">
+        Notification
+      </div>
+      <ion-list>
+        <div class="item item-toggle">
+          Vibrate
+          <label class="toggle">
+            <input type="checkbox" ng-model="settings.vibrate">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </div>
+        <div class="item item-toggle">
+          Timer completion sounds
+          <label class="toggle">
+            <input type="checkbox" ng-model="settings.sound">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </div>
+      </ion-list>
+    </div>
+    <button class="button button-positive button-block" ng-click="save()">Save All</button>
+  </ion-content>
+</ion-view>

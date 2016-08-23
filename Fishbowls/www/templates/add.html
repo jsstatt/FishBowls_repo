@@ -4,30 +4,19 @@
         <div class="item item-input">
     				<input type="text" style="font-size:100%" ng-model="projectName" placeholder="Project Name">
         </div>
-    		<ion-checkbox ng-model="isChecked">Delete after use</ion-checkbox>
-        <div class="item text-right">
-          <a ng-click="toggleMoreOptions()">{{getMoreTagText()}}</a>
-        </div>
-        <div class="item" ng-hide="moreOption">
-          More options
-        </div>
-        <div class="item" ng-hide="moreOption">
-          More options
-        </div>
-        <div class="item" ng-hide="moreOption">
-          More options
-        </div>
+    		<ion-checkbox class="item" ng-model="deleteAfter">Delete after use</ion-checkbox>
+        <ion-checkbox class="item" ng-model="checkMisc">Play tasks in order</ion-checkbox>
         <div class="row">
-            <button class="button button-small col text-center button-positive" ng-click="toggleReordering()">
-                Reorder
-            </button>
+          <button class="button button-small col text-center button-positive" ng-click="toggleReordering()">
+            Reorder
+          </button>
         </div>
         <div class="item">
           <ion-list show-reorder="reordering">
 
             <ion-item class=" item-icon-right" ng-repeat="x in project.tasks track by $index">
               <div class="row" style="padding: 0">
-                <div class="col" style="padding: 0">
+                <div class="col col-75" style="padding: 0">
                   <p>{{x.title}}</p>
                 </div>
                 <div class="col" style="padding: 0">
@@ -39,13 +28,13 @@
             </ion-item>
 
             <div class="item card">
-                  <input type="text" style="font-size:100%" ng-model="addMe" placeholder="Task Description">
-                  <div class="item range range-positive">
-                      Time:<input type="range" ng-model="time" name="volume" min="0" max="60" value="0">{{time}} Min
-                  </div>
-                  <button class="button button-block button-positive" ng-click="addTask()">
-                    Add
-                  </button>
+              <input type="text" style="font-size:100%" ng-model="addMe" placeholder="Task Description">
+              <div class="item range range-positive">
+                  Time:<input type="range" ng-model="time" name="volume" min="0" max="{{settings.maxSlider}}" value="0">{{time}} Min
+              </div>
+              <button class="button button-block button-positive" ng-click="addTask()">
+                Add
+              </button>
             </div>
           </ion-list>
         </div>

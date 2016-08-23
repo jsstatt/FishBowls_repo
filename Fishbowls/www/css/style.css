@@ -8,8 +8,18 @@ i.big {
   font-size: 200%;
 }
 
-.card-fixed {
-  position: fixed;
-  bottom: 40px;
-  text-align: center;
+.text-center {
+text-align: center;
+}
+
+p {
+  line-height: 100%;
+}
+
+.nopadding {
+  padding: 0;
+}
+
+.noborder {
+  border-width: 0px;
 }

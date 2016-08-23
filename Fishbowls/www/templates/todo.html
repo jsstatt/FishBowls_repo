@@ -1,0 +1,19 @@
+<ion-view view-title="To Do List">
+  <ion-content ng-controller="TodoCtrl">
+    <ion-list>
+      <div class="item icon item-icon-right nopadding" ng-repeat="x in todoList track by $index">
+        <div class="row nopadding noborder">
+          <div class="col col-80 nopadding noborder">
+            <ion-checkbox class="noborder" ng-model="x.active" ng-click="updateProject(x)">
+              {{x.title}}
+            </ion-checkbox>
+          </div>
+          <div class="col col-20 nopadding noborder">
+            <i class="icon ion-close big text-center" style="font-size: 100%" ng-click="removeTodoItem(x)"></i>
+          </div>
+        </div>
+      </div>
+      <a class=" item icon icon-right ion-plus" href="#/addtodo"> Add Project to list</a>
+    </ion-list>
+  </ion-content>
+</ion-view>
