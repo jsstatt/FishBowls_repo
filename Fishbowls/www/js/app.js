@@ -135,9 +135,10 @@
     };
   });
 
-  app.controller("TodoCtrl", function($scope, ProjectStore, $ionicListDelegate) {
+  app.controller("TodoCtrl", function($scope, ProjectStore, $ionicListDelegate, $interval) {
 
     $scope.todoList = ProjectStore.listTodo();
+    var interval = '';
 
     $scope.removeTodoItem = function(projectId) {
       ProjectStore.removeTodoItem(projectId);
@@ -150,7 +151,17 @@
       ProjectStore.updateTodo(project);
     }
 
-
+    interval = $interval(function () {
+        for (var i = 0; i < $scope.todoList.length; i++) {
+          if ($scope.todoList[i].useOnce === true) {
+            console.log($scope.todoList[i].todoActive);
+              if ($scope.todoList[i].todoActive === false) {
+                ProjectStore.remove($scope.todoList[i].id);
+                ProjectStore.removeTodoItem($scope.todoList[i]);
+              }
+            }
+          }
+    }, 10);
 
   });
 
@@ -159,10 +170,13 @@
 
     $scope.settings = ProjectStore.listSettings();
     $scope.reordering = false;
-    $scope.time = 0;
+    $scope.time = $scope.settings.StartingTimerNum;
+    $scope.startingBlanks = $scope.settings.startingBlanks;
     $scope.deleteAfter = $scope.settings.deleteAfter;
     $scope.checkMisc = $scope.settings.playInOrder;
-
+    $scope.boxState = 'add';
+    $scope.boxButtonText = 'Add';
+    $scope.taskInEdit = '';
 
     $scope.project = {
         id: '',
@@ -171,21 +185,53 @@
         useOnce: false,
         onTodo: false,
         active: false,
+        todoActive: false,
         ordered: true
       };
 
-    $scope.addTask = function () {
-      if ($scope.addMe !== null) {
-
+    if ($scope.startingBlanks > 0) {
+      for (var i = 0; i < $scope.startingBlanks; i++) {
         var task = new Object();
-        task.title = $scope.addMe;
+        task.title = 'Blank';
         task.time = $scope.time;
         task.finished = false;
+        task.editing = '';
 
         $scope.project['tasks'].push(task);
       }
-      $scope.addMe = null;
+    }
+
+    $scope.addTask = function () {
+      if ($scope.boxState === 'add') {
+        if ($scope.addMe !== null) {
+
+          var task = new Object();
+          task.title = $scope.addMe;
+          task.time = $scope.time;
+          task.finished = false;
+
+          $scope.project['tasks'].push(task);
+        }
+        $scope.addMe = null;
+      } else if ($scope.boxState === 'edit') {
+        $scope.taskInEdit.title = $scope.addMe;
+        $scope.taskInEdit.time = $scope.time;
+        $scope.taskInEdit.editing = '';
+        $scope.boxState = 'add';
+        $scope.boxButtonText = 'Add'
+        $scope.addMe = null;
+      }
+
     };
+
+    $scope.editTask = function(x) {
+      $scope.boxState = 'edit';
+      $scope.boxButtonText = 'Save Edit'
+      $scope.addMe = x.title;
+      $scope.time = x.time;
+      $scope.taskInEdit = x;
+      x.editing = 'highlight';
+    }
 
     $scope.removeTask = function(x) {
       $scope.project['tasks'].splice(x,1);
@@ -194,6 +240,7 @@
     $scope.move = function(task, fromIndex, toIndex) {
       $scope.project['tasks'].splice(fromIndex, 1);
       $scope.project['tasks'].splice(toIndex, 0, task);
+      $scope.reordering = !$scope.reordering;
     };
 
     $scope.toggleReordering = function() {
@@ -220,20 +267,42 @@
     $scope.settings = ProjectStore.listSettings();
     $scope.addMe = '';
     $scope.time = '';
+    $scope.boxState = 'add';
+    $scope.boxButtonText = 'Add';
+    $scope.taskInEdit = '';
 
 
     $scope.addTask = function () {
-      if ($scope.addMe !== '') {
+      if ($scope.boxState === 'add') {
+        if ($scope.addMe !== null) {
 
-        var task = new Object();
-        task.title = $scope.addMe;
-        task.time = $scope.time;
-        task.finished = false;
+          var task = new Object();
+          task.title = $scope.addMe;
+          task.time = $scope.time;
+          task.finished = false;
 
-        $scope.project['tasks'].push(task);
+          $scope.project['tasks'].push(task);
+        }
+        $scope.addMe = null;
+      } else if ($scope.boxState === 'edit') {
+        $scope.taskInEdit.title = $scope.addMe;
+        $scope.taskInEdit.time = $scope.time;
+        $scope.taskInEdit.editing = '';
+        $scope.boxState = 'add';
+        $scope.boxButtonText = 'Add'
+        $scope.addMe = null;
       }
-      $scope.addMe = '';
+
     };
+
+    $scope.editTask = function(x) {
+      $scope.boxState = 'edit';
+      $scope.boxButtonText = 'Save Edit'
+      $scope.addMe = x.title;
+      $scope.time = x.time;
+      $scope.taskInEdit = x;
+      x.editing = 'highlight';
+    }
 
     $scope.removeTask = function(x) {
       $scope.project['tasks'].splice(x,1);
@@ -242,6 +311,7 @@
     $scope.move = function(task, fromIndex, toIndex) {
       $scope.project['tasks'].splice(fromIndex, 1);
       $scope.project['tasks'].splice(toIndex, 0, task);
+      $scope.reordering = !$scope.reordering;
     };
 
     $scope.toggleReordering = function() {
@@ -272,9 +342,11 @@
     $interval, $cordovaVibration) {
 
     $scope.projects = ProjectStore.listTodo();
+    $scope.allProjects = ProjectStore.list();
     $scope.settings = ProjectStore.listSettings();
     $scope.pjtTitle = 'Start';
     $scope.tskDescription = 'The forward button will complete the task. Click here or click the skip button to start';
+    $scope.addTimer = $scope.settings.StartingTimerNum;
     $scope.time = 0;
     $scope.seconds = 0;
     $scope.minutes = 0;
@@ -322,7 +394,6 @@
            type: 'button-positive',
            onTap: function(e) {
              // Returning a value will cause the promise to resolve with the given value.
-
                if ($scope.data.addMe !== null) {
 
                  var task = new Object();
@@ -339,19 +410,20 @@
                    }
 
                  } else if ($scope.data.choice === 'misc') {
-                    for (var i = 0; i < $scope.projects.length; i++) {
-                      if ($scope.projects[i].title === 'Miscellaneous') {
-                        $scope.projects[i]['tasks'].push(task);
+                    for (var i = 0; i < $scope.allProjects.length; i++) {
+                      if ($scope.allProjects[i].title === 'Miscellaneous') {
+                        $scope.allProjects[i]['tasks'].push(task);
                       }
                     }
-                    var length = $scope.projects.length;
-                    if ($scope.projects[length-1].title !== 'Miscellaneous') {
+                    var length = $scope.allProjects.length;
+                    if ($scope.allProjects[length-1].title !== 'Miscellaneous') {
                       var newProject = new Object();
                       newProject.id = new Date().getTime().toString();
                       newProject.title = 'Miscellaneous';
                       newProject.useOnce = true;
                       newProject.active = true;
-                      newProject.ordered = false;
+                      newProject.todoActive = true;
+                      newProject.ordered = true;
                       newProject.onTodo = false;
                       newProject.tasks = [];
                       newProject.tasks.push(task);
@@ -386,15 +458,11 @@
             var last = $scope.selectedProject.tasks.length;
             if ($scope.selectedProject.tasks[last-1].finished === true) {
               $scope.selectedProject.active = false;
+              $scope.selectedProject.todoActive = false;
               for (var i = 0; i < $scope.selectedProject.tasks.length; i++) {
                 $scope.selectedProject.tasks[i].finished = false;
               }
               ProjectStore.updateTodo($scope.selectedProject);
-
-              if ($scope.selectedProject.useOnce === true) {
-                ProjectStore.remove($scope.selectedProject);
-                ProjectStore.removeTodoItem($scope.selectedProject);
-              }
             }
           } else if ($scope.selectedProject.ordered === false) {
             var filteredRandom = [];
@@ -408,21 +476,17 @@
               }
             }
             $scope.selectedTask = filteredRandom[Math.floor(Math.random()*filteredRandom.length)];
-
             $scope.tskDescription = $scope.selectedTask.title;
             $scope.tskMax = $scope.selectedTask.time*60000;
             var last = $scope.selectedProject.tasks.length;
 
-            if (filteredRandomFalse.length >= last-1) {
+            if (filteredRandomFalse.length >= last) {
               $scope.selectedProject.active = false;
+              $scope.selectedProject.todoActive = false;
               for (var i = 0; i < $scope.selectedProject.tasks.length; i++) {
                 $scope.selectedProject.tasks[i].finished = false;
               }
               ProjectStore.updateTodo($scope.selectedProject);
-              if ($scope.selectedProject.useOnce === true) {
-                ProjectStore.remove($scope.selectedProject);
-                ProjectStore.removeTodoItem($scope.selectedProject);
-              }
             }
           }
         }
@@ -440,7 +504,6 @@
             filtered.push($scope.projects[i]);
           }
         }
-        console.log(filtered.length);
         if (filtered.length > 0) {
           if ($scope.lockProject === false) {
             $scope.selectedProject = filtered[Math.floor(Math.random()*filtered.length)];
@@ -472,14 +535,11 @@
 
                   if ($scope.selectedProject.tasks[last-1].finished == true) {
                     $scope.selectedProject.active = false;
+                    $scope.selectedProject.todoActive = false;
                     for (var i = 0; i < $scope.selectedProject.tasks.length; i++) {
                       $scope.selectedProject.tasks[i].finished = false;
                     }
                     ProjectStore.updateTodo($scope.selectedProject);
-                    if ($scope.selectedProject.useOnce === true) {
-                      ProjectStore.remove($scope.selectedProject);
-                      ProjectStore.removeTodoItem($scope.selectedProject);
-                    }
                   }
                   return;
                 }
@@ -503,19 +563,15 @@
 
               if (filteredRandomFalse.length >= last-1) {
                 $scope.selectedProject.active = false;
+                $scope.selectedProject.todoActive = false;
                 for (var i = 0; i < $scope.selectedProject.tasks.length; i++) {
                   $scope.selectedProject.tasks[i].finished = false;
                 }
                 ProjectStore.updateTodo($scope.selectedProject);
-                if ($scope.selectedProject.useOnce === true) {
-                  ProjectStore.remove($scope.selectedProject);
-                  ProjectStore.removeTodoItem($scope.selectedProject);
-                }
               }
             }
           }
         } else if (filtered.length === 0) {
-          console.log('is 0');
           $scope.pjtTitle = 'All Finished';
           $scope.tskDescription = 'Great Job! You are all finished for now';
         }
@@ -525,7 +581,6 @@
 
 
     $scope.toggleTimer = function() {
-      $scope.play('drop');
       if (stop === undefined) {
         $scope.startTimer();
       } else {

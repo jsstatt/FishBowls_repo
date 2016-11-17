@@ -1,5 +1,5 @@
 <ion-view view-title="Settings">
-  <ion-content class="padding card-padding" ng-controller="SettingsCtrl" scroll="false">
+  <ion-content class="padding card-padding" ng-controller="SettingsCtrl">
     <div class="card">
       <div class="item item-divider item-dark">
         Editing
@@ -12,6 +12,26 @@
             </div>
             <div class="col col-30">
               <input class="item" type="number" ng-model="settings.maxSlider"></input>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="row">
+            <div class="col col-70">
+              Starting Timer Value
+            </div>
+            <div class="col col-30">
+              <input class="item" type="number" ng-model="settings.StartingTimerNum"></input>
+            </div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="row">
+            <div class="col col-70">
+              Starting Blanks
+            </div>
+            <div class="col col-30">
+              <input class="item" type="number" ng-model="settings.startingBlanks"></input>
             </div>
           </div>
         </ion-item>

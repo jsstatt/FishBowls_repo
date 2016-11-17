@@ -16,6 +16,8 @@ angular.module('fishbowls.projectstore', [])
 
   var settings = {
     maxSlider: 30,
+    startingBlanks: 0,
+    StartingTimerNum: 1,
     deleteAfter: false,
     playInOrder: true,
     vibrate: true,
@@ -67,8 +69,10 @@ angular.module('fishbowls.projectstore', [])
     },
 
     remove: function(projectId) {
+      console.log(projectId);
       for (var i = 0; i < projectArray.length; i++) {
         if (projectArray[i].id === projectId) {
+          console.log(projectArray[i]);
           projectArray.splice(i, 1);
           persist();
           return;
@@ -105,6 +109,7 @@ angular.module('fishbowls.projectstore', [])
     addTodoItems: function(projects) {
       for (var i = 0; i < projects.length; i++) {
         projects[i].active = true;
+        projects[i].todoActive = true;
         todoArray.push(projects[i]);
         persistTodo();
       }
