@@ -2,7 +2,7 @@
 
 (function() {
 
-  var app = angular.module('fishbowls', ['ionic', 'fishbowls.projectstore', 'ngCordova']);
+  var app = angular.module('fishbowls', ['ionic', 'fishbowls.projectstore', 'ngCordova', 'rzModule']);
 
 
 
@@ -339,7 +339,7 @@
 
 
   app.controller("HomeCtrl", function($scope, $state, ProjectStore, $ionicPopup,
-    $interval, $cordovaVibration) {
+    $interval, $cordovaLocalNotification) {
 
     $scope.projects = ProjectStore.listTodo();
     $scope.allProjects = ProjectStore.list();
@@ -357,11 +357,37 @@
     $scope.hideNew = true;
     $scope.selectedProject = '';
     $scope.slectedTask = [];
+    $scope.sliderValue = .5;
+    $scope.sliderMinutes = 0;
+    $scope.sliderSeconds =  0;
+    $scope.hideSlider = true;
+
+    $scope.slider = {
+      options: {
+          floor: 0,
+          ceil: 5,
+          step: 0.01,
+          precision: 1,
+          showSelectionBar: true,
+          readOnly: true,
+          autoHideLimitLabels: true,
+          enforceStep: true,
+          translate: function(value) {
+            return "";
+          },
+          onChange: function() {
+           console.log('on change '); // logs 'on change slider-id'
+          }
+      }
+  };
+
+    $scope.refreshSlider = function () {
+      $scope.$broadcast('rzSliderForceRender');
+    };
+
+
+
     var stop;
-
-
-
-
     $scope.toggleLock = function() {
       if ($scope.lockIcon === 'ion-unlocked') {
         $scope.lockIcon = 'ion-locked';
@@ -449,6 +475,7 @@
     };
 
     $scope.finish = function() {
+       $scope.hideSlider = false;
       if ($scope.pjtTitle === 'Start' || $scope.pjtTitle === 'All Finished') {
         $scope.skipTask();
       } else {
@@ -478,6 +505,9 @@
             $scope.selectedTask = filteredRandom[Math.floor(Math.random()*filteredRandom.length)];
             $scope.tskDescription = $scope.selectedTask.title;
             $scope.tskMax = $scope.selectedTask.time*60000;
+            $scope.sliderValue = 0;
+            $scope.slider.options.ceil = $scope.selectedTask.time;
+
             var last = $scope.selectedProject.tasks.length;
 
             if (filteredRandomFalse.length >= last) {
@@ -494,6 +524,7 @@
     };
 
     $scope.skipTask = function () {
+      $scope.hideSlider = false;
       $scope.restartTimer();
       var filtered = [];
 
@@ -531,6 +562,9 @@
                   $scope.selectedTask = $scope.selectedProject.tasks[i];
                   $scope.tskDescription = $scope.selectedTask.title;
                   $scope.tskMax = $scope.selectedTask.time*60000;
+                  $scope.sliderValue = 0;
+                  $scope.slider.options.ceil = $scope.selectedTask.time;
+
                   var last = $scope.selectedProject.tasks.length;
 
                   if ($scope.selectedProject.tasks[last-1].finished == true) {
@@ -559,6 +593,9 @@
 
               $scope.tskDescription = $scope.selectedTask.title;
               $scope.tskMax = $scope.selectedTask.time*60000;
+              $scope.sliderValue = 0;
+              $scope.slider.options.ceil = $scope.selectedTask.time;
+
               var last = $scope.selectedProject.tasks.length;
 
               if (filteredRandomFalse.length >= last-1) {
@@ -572,6 +609,7 @@
             }
           }
         } else if (filtered.length === 0) {
+          $scope.hideSlider = true;
           $scope.pjtTitle = 'All Finished';
           $scope.tskDescription = 'Great Job! You are all finished for now';
         }
@@ -598,18 +636,25 @@
           $scope.seconds += 1000;
           if ($scope.seconds === 60000) {
             $scope.minutes += 60000;
+
             $scope.seconds = 0;
           }
         if ($scope.minutes === $scope.tskMax){
           $scope.stopTimer();
           $scope.timerPopup();
-          if ($scope.settings.vibrate === true) {
-            $cordovaVibration.vibrate(400);
-          }
           if ($scope.settings.sound === true) {
+            cordova.plugins.notification.local.schedule({
+              id: new Date().getTime().toString(),
+              title: "fishbowls",
+              text: "Alarm for " + $scope.tskDescription + " is complete"
+          });
           }
           $scope.minutes = $scope.tskMax;
         }
+          $scope.sliderValue = ($scope.minutes/60000)+((($scope.seconds/1000) * (100/60))/100);
+          $scope.refreshSlider();
+          console.log($scope.sliderValue  );
+
       }, 1000);
     };
 

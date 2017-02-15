@@ -10,7 +10,7 @@
     </div>
     <ion-list>
         <ion-item class="item-icon-right item-remove-animate"
-        href="#/edit/{{x.id}}" ng-repeat="x in projects | orderBy : 'title' track by x.id"
+        href="#/edit/{{x.id}}" ng-repeat="x in projects track by x.id | orderBy : 'title'"
         on-hold="showCheckboxes()" ng-hide="hideItem">
             <div class=" row nopadding">
               <h2>{{x.title}}</h2>

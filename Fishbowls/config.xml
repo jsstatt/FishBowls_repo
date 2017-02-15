@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.fishbowls173868" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Fishbowls</name>
+  <name>FishBowls</name>
   <description>
-        An Ionic Framework and Cordova project.
+        A free app for teens with ADHD that uses an unconventional, but surprisingly effective technique to help them start and finish tasks.
     </description>
   <author email="you@example.com" href="http://example.com.com/">
-      Your Name Here
+      Jason Statt
     </author>
   <content src="index.html"/>
   <access origin="*"/>
@@ -41,4 +41,5 @@
     <splash src="resources\android\splash\drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
   </platform>
   <icon src="resources\android\icon\drawable-xhdpi-icon.png"/>
+  <allow-navigation href="http://192.168.0.102:8100"/>
 </widget>

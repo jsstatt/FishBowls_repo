@@ -12,13 +12,13 @@
         <br><br><br>
         <p style="font-size: 160%"> {{tskDescription}}</p>
         <br><br>
-        <div class="item range range-positive item-stable">
-          {{minutes | date : 'mm'}}:{{seconds | date : 'ss'}} <input type="range"
-           ng-model="time" name="volume" min="0" max="{{max}}" value="{{minutes}}" step="1">
-          {{tskMax | date : 'mm'}}:00
+        <div class="item item-stable" style="font-size: 100%" ng-hide="hideSlider">
+          {{minutes | date : 'mm'}}:{{seconds | date : 'ss'}} / {{tskMax | date : 'mm'}}:00 <rzslider class="custom-slider"
+           rz-slider-model="sliderValue" rz-slider-options="slider.options"></rzslider>
         </div>
+
         <br>
-        <div class="text-center"><i class="icon big"
+        <div class="text-center"><i class="icon big" ng-hide="hideSlider"
           ng-class="getTimericon()" ng-click="toggleTimer()"></i>
         </div>
       </div>
