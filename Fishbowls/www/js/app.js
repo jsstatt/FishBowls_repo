@@ -280,6 +280,7 @@
           task.title = $scope.addMe;
           task.time = $scope.time;
           task.finished = false;
+          task.id =  new Date().getTime().toString();
 
           $scope.project['tasks'].push(task);
         }
@@ -339,7 +340,7 @@
 
 
   app.controller("HomeCtrl", function($scope, $state, ProjectStore, $ionicPopup,
-    $interval, $cordovaLocalNotification) {
+    $interval, $cordovaLocalNotification, $cordovaToast) {
 
     $scope.projects = ProjectStore.listTodo();
     $scope.allProjects = ProjectStore.list();
@@ -361,6 +362,8 @@
     $scope.sliderMinutes = 0;
     $scope.sliderSeconds =  0;
     $scope.hideSlider = true;
+    $scope.pastProjects = '';
+    $scope.pastTasks = '';
 
     $scope.slider = {
       options: {
@@ -374,9 +377,6 @@
           enforceStep: true,
           translate: function(value) {
             return "";
-          },
-          onChange: function() {
-           console.log('on change '); // logs 'on change slider-id'
           }
       }
   };
@@ -426,6 +426,7 @@
                  task.title = $scope.data.addMe;
                  task.time = $scope.data.time;
                  task.finished = false;
+                 task.id =  new Date().getTime().toString();
 
 
                  if ($scope.data.choice === 'this') {
@@ -480,6 +481,10 @@
         $scope.skipTask();
       } else {
         $scope.selectedTask.finished = true;
+        $scope.pastProjects = $scope.selectedProject;
+        console.log("past task = "+$scope.pastProjects);
+        $scope.pastTasks = $scope.selectedTask;
+
         if ($scope.selectedProject !== undefined) {
           if ($scope.selectedProject.ordered === true) {
             var last = $scope.selectedProject.tasks.length;
@@ -616,7 +621,29 @@
       }
     };
 
+    $scope.undo = function() {
+        console.log($scope.pastProjects + "first test after undo" );
+      if ($scope.pastProjects === "") {
+          window.plugins.toast.show('Cannot go back', 'short', 'bottom');
+      } else if ($scope.pastProjects !== undefined) {
+        console.log("back");
+        console.log($scope.pastProjects + "Second test after check");
+          for (var i = 0; i < $scope.pastProjects.tasks.length; i++) {
+            if ($scope.pastProjects.tasks[i].id === $scope.pastTasks.id) {
+              $scope.pastProjects.tasks[i].finished = false;
+            }
+          }
+          ProjectStore.updateTodo($scope.pastProjects);
 
+          $scope.selectedProject = $scope.pastProjects;
+          $scope.selectedTask = $scope.pastTasks;
+          $scope.tskDescription = $scope.pastTasks.title;
+          $scope.pjtTitle = $scope.pastProjects.title;
+          $scope.tskMax = $scope.pastTasks.time*60000;
+          $scope.sliderValue = 0;
+          $scope.slider.options.ceil = $scope.pastTasks.time;
+      }
+    };
 
     $scope.toggleTimer = function() {
       if (stop === undefined) {
@@ -646,15 +673,16 @@
             cordova.plugins.notification.local.schedule({
               id: new Date().getTime().toString(),
               title: "fishbowls",
-              text: "Alarm for " + $scope.tskDescription + " is complete"
+              text: "Alarm for " + $scope.tskDescription + " is complete",
+              icon: "file://platform/android/res/drawable",
+              sound: "file://audio/water_drop.mp3",
+              smallIcon: "file://img/icon.png",
           });
           }
           $scope.minutes = $scope.tskMax;
         }
           $scope.sliderValue = ($scope.minutes/60000)+((($scope.seconds/1000) * (100/60))/100);
           $scope.refreshSlider();
-          console.log($scope.sliderValue  );
-
       }, 1000);
     };
 
