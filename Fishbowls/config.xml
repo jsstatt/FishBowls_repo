@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.fishbowls173868" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.fishbowls173868" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>FishBowls</name>
   <description>
         A free app for teens with ADHD that uses an unconventional, but surprisingly effective technique to help them start and finish tasks.
     </description>
-  <author email="you@example.com" href="http://example.com.com/">
+  <author email="jason.statt@highestfunction.org.com" href="http://highestfunction.org/">
       Jason Statt
     </author>
   <content src="index.html"/>
@@ -17,6 +17,7 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
+  <preference name="Orientation" value="portrait " />
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>

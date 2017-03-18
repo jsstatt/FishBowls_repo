@@ -72,6 +72,15 @@
 
     });
 
+    $stateProvider.state('about', {
+      url: '/about',
+      views: {
+        'tab-home': {
+            templateUrl: 'templates/about.html'
+        }
+      }
+    });
+
     $urlRouterProvider.otherwise('/home');
 
   });
@@ -335,6 +344,10 @@
       ProjectStore.updateSettings($scope.settings);
       $state.go('home');
     };
+
+  });
+
+  app.controller("AboutCtrl", function($scope, $state, ProjectStore) {
 
   });
 
