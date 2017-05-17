@@ -19,6 +19,7 @@
     <script scr="lib/moment/min/locales.min.js"></script>
     <script scr="lib/humanize-duration/humanize-duration.js"></script>
     <script src="lib/angularjs-slider/dist/rzslider.min.js"></script>
+    <script src="lib/angular-translate/angular-translate.min.js"></script>
 
 
 
@@ -31,19 +32,19 @@
         <ion-nav-back-button></ion-nav-back-button>
       </ion-nav-bar>
       <ion-tabs class="tabs-icon-top">
-        <ion-tab title="Activity" icon="ion-paper-airplane" href="#/home">
+        <ion-tab title="{{'tab_activities' | translate}}" icon="ion-paper-airplane" href="#/home">
           <ion-nav-view name="tab-home">
 
 
           </ion-nav-view>
         </ion-tab>
-        <ion-tab title="To Do" icon="ion-clipboard" href="#/todo">
+        <ion-tab title="{{'tab_todo' | translate}}" icon="ion-clipboard" href="#/todo">
           <ion-nav-view name="tab-todo">
 
 
           </ion-nav-view>
         </ion-tab>
-        <ion-tab title="Projects" icon="ion-android-folder" href="#/list">
+        <ion-tab title="{{'tab_projects' | translate}}" icon="ion-android-folder" href="#/list">
           <ion-nav-view name="tab-projects">
 
 

@@ -1,12 +1,12 @@
-<ion-view view-title="Projects">
+<ion-view view-title="{{'tab_projects' | translate}}">
   <ion-nav-buttons side="secondary">
      <a class="button button-clear icon ion-plus" href="#/add"></a>
    </ion-nav-buttons>
   <ion-content ng-controller="ListCtrl">
     <div class="item item-stable" ng-hide="hideCheckboxes" style="padding:3px">
-      <a class="button button-positive" ng-click="closeCheckboxes()">Back</a>
-      <a class="button button-positive" ng-click="deleteCheckItems();closeCheckboxes();">Delete</a>
-      <a class="button button-positive" ng-click="addTodoItems();closeCheckboxes();">Add to Todo</a>
+      <a class="button button-positive" ng-click="closeCheckboxes()">{{"list_back" | translate}}</a>
+      <a class="button button-positive" ng-click="deleteCheckItems();closeCheckboxes();">{{"list_delete" | translate}}</a>
+      <a class="button button-positive" ng-click="addTodoItems();closeCheckboxes();">{{"list_add_to_todo" | translate}}</a>
     </div>
     <ion-list>
         <ion-item class="item-icon-right item-remove-animate"

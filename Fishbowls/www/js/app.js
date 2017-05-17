@@ -2,11 +2,11 @@
 
 (function() {
 
-  var app = angular.module('fishbowls', ['ionic', 'fishbowls.projectstore', 'ngCordova', 'rzModule']);
+  var app = angular.module('fishbowls', ['ionic', 'fishbowls.projectstore', 'ngCordova', 'rzModule', 'pascalprecht.translate']);
 
 
 
-  app.config(function($stateProvider, $urlRouterProvider) {
+  app.config(function($stateProvider, $urlRouterProvider, $translateProvider) {
 
     $stateProvider.state('home', {
       url: '/home',
@@ -83,7 +83,162 @@
 
     $urlRouterProvider.otherwise('/home');
 
+
+    // Language
+
+    $translateProvider.useSanitizeValueStrategy('sanitize');
+
+    // English
+    $translateProvider.translations('en', {
+      start_title: "Start",
+      start_tab: "The forward button will complete the task. Click here or click the skip button to start",
+
+      // Tabs
+      tab_activities: "Activities",
+      tab_todo: "To Do",
+      tab_projects: "Projects",
+
+
+      // Settings
+      settings_title: "Settings",
+      settings_editing_title: "Editing",
+      settings_editing: {
+            max_timer: 'Max Timer Limit (Mins)',
+            starting_timer: 'Starting Timer Value (Mins)',
+            starting_blanks: 'Starting Blanks',
+            delete_after: 'Delete After Use Default',
+            play_in_order: 'Play In Order Default'
+      },
+      settings_language_title: "Languages",
+      settings_language_subtitle: "Language",
+      settings_notification_title: "Notifications",
+      settings_notification_alarm: "Alarm Notification",
+      settings_save_all: "Save All",
+
+      // Todo
+      todo_title: "To Do List",
+      add_project_to_list: "Add Project To List",
+
+      // List
+      list_back: "Back",
+      list_delete: "Delete",
+      list_add_to_todo: "Add To Todo",
+
+      // add new task popup
+      add_new_task: "Add New Task",
+      this_project: "This Project",
+      miscellaneous: "Miscellaneous",
+      cancel: "Cancel",
+      accept: "OK",
+
+      // Add project
+      add_project: {
+        add_project: "Add Project",
+        edit_project: "Edit Project",
+        project_name: "Project Name",
+        delete_after: "Delete After Use",
+        play_in_order: "Play Tasks In Order",
+        micro_task: "Micro Tasks",
+        task_description: "Task Description",
+        time: "Time",
+        add: "Add",
+        blank: "blank",
+        save_all: "Save All",
+        save_edit: "Save Edit"
+      },
+
+      // About
+      about: "About",
+      about_fishbowls: "About FishBowls",
+      about_fishbowls_content: "FishBowls is free thanks to Kickstarter and our generous backers.",
+      concept: "What is fishbowls and how does it work? Find out",
+      here: "here",
+      contacts: "Contacts",
+      special_thanks: "Special Thanks"
+
+
+
+    });
+    // Spanish
+    $translateProvider.translations('es', {
+      start_title: "Comienzo",
+      start_tab: "El boton de avance completara la tarea. Haga clic aqui o haga clic en el boton Saltar para iniciar",
+
+      // Tabs
+      tab_activities: "Actividades",
+      tab_todo: "Lista De Quehacer",
+      tab_projects: "Proyectos",
+
+      // Settings
+      settings_title: "Configuracion",
+      settings_editing_title: "Edicion",
+      settings_editing: {
+            max_timer: 'Limite Maximo Del Temporizador (Min)',
+            starting_timer: 'Valor Del Temporizador De Inicio (Mins)',
+            starting_blanks: 'Espacios iniciales',
+            delete_after: 'Borrar Despues De Usar Defecto',
+            play_in_order: 'Jugar En Orden Defecto'
+      },
+      settings_language_title: "Idiomas",
+      settings_language_subtitle: "Idioma",
+      settings_notification_title: "Notificaciones",
+      settings_notification_alarm: "Notificacion De Alarma",
+      settings_save_all: "Guardar a todos",
+
+      // Todo
+      todo_title: "Lista De Quehaceres",
+      add_project_to_list: "Poner Proyecto En La Lista",
+
+      // List
+      list_back: "Regresar",
+      list_delete: "Borrar",
+      list_add_to_todo: "Agregar A La Lista",
+
+      // add new task popup
+      add_new_task: "Apregar Nueva Tarea",
+      this_project: "Este proyecto",
+      miscellaneous: "miscelaneos",
+      cancel: "Cancelar",
+      accept: "Aceptar",
+
+      // Add project
+      add_project: {
+        add_project: "Insertar Proyecto",
+        edit_project: "Editar Proyecto",
+        project_name: "Nombre Del Proyecto",
+        delete_after: "Borrar Despues De Usar",
+        play_in_order: "Jugar En Orden",
+        micro_task: "Micro Tareas",
+        task_description: "Descripcion De La Tarea",
+        time: "hora",
+        add: "Anadir",
+        blank: "blanco",
+        save_all: "Guardar A Todos",
+        save_edit: "Guardar Edicion"
+      },
+
+      // About
+      about: "Sobre",
+      about_fishbowls: "Sobre FishBowls",
+      about_fishbowls_content: "FishBowls es gratis gracias a Kickstarter ya nuestros generosos partidarios",
+      concept: "Que es fishbowls y como funciona? Descubre",
+      here: " aqui",
+      contacts: "Contactos",
+      special_thanks: "Gracias Especiales"
+
+    });
+
+    $translateProvider.preferredLanguage("en");
+    $translateProvider.fallbackLanguage("en");
+
   });
+
+  app.run(function($ionicPlatform, $translate, ProjectStore) {
+         $ionicPlatform.ready(function() {
+           var settings = ProjectStore.listSettings();
+           $translate.use(settings.language.value);
+         });
+    });
 
   app.controller("ListCtrl", function($scope, $state, ProjectStore) {
 
@@ -184,7 +339,7 @@
     $scope.deleteAfter = $scope.settings.deleteAfter;
     $scope.checkMisc = $scope.settings.playInOrder;
     $scope.boxState = 'add';
-    $scope.boxButtonText = 'Add';
+    $scope.boxButtonText = $translate.instant('add_project.add');
     $scope.taskInEdit = '';
 
     $scope.project = {
@@ -201,7 +356,7 @@
     if ($scope.startingBlanks > 0) {
       for (var i = 0; i < $scope.startingBlanks; i++) {
         var task = new Object();
-        task.title = 'Blank';
+        task.title = $translate.instant('add_project.blank');
         task.time = $scope.time;
         task.finished = false;
         task.editing = '';
@@ -227,7 +382,7 @@
         $scope.taskInEdit.time = $scope.time;
         $scope.taskInEdit.editing = '';
         $scope.boxState = 'add';
-        $scope.boxButtonText = 'Add'
+        $scope.boxButtonText = $translate.instant('add_project.add');
         $scope.addMe = null;
       }
 
@@ -235,7 +390,7 @@
 
     $scope.editTask = function(x) {
       $scope.boxState = 'edit';
-      $scope.boxButtonText = 'Save Edit'
+      $scope.boxButtonText = $translate.instant('add_project.save_edit');
       $scope.addMe = x.title;
       $scope.time = x.time;
       $scope.taskInEdit = x;
@@ -270,15 +425,16 @@
   });
 
 
-  app.controller("EditCtrl", function($scope, $state, ProjectStore) {
+  app.controller("EditCtrl", function($scope, $state, ProjectStore, $translate) {
 
     $scope.project = angular.copy(ProjectStore.getProject($state.params.projectId));
     $scope.settings = ProjectStore.listSettings();
     $scope.addMe = '';
     $scope.time = '';
     $scope.boxState = 'add';
-    $scope.boxButtonText = 'Add';
+    $scope.boxButtonText = $translate.instant('add_project.add');
     $scope.taskInEdit = '';
+
 
 
     $scope.addTask = function () {
@@ -299,7 +455,7 @@
         $scope.taskInEdit.time = $scope.time;
         $scope.taskInEdit.editing = '';
         $scope.boxState = 'add';
-        $scope.boxButtonText = 'Add'
+        $scope.boxButtonText = $translate.instant('add_project.add');
         $scope.addMe = null;
       }
 
@@ -307,7 +463,7 @@
 
     $scope.editTask = function(x) {
       $scope.boxState = 'edit';
-      $scope.boxButtonText = 'Save Edit'
+      $scope.boxButtonText = $translate.instant('add_project.save_edit');
       $scope.addMe = x.title;
       $scope.time = x.time;
       $scope.taskInEdit = x;
@@ -336,12 +492,35 @@
   });
 
 
-  app.controller("SettingsCtrl", function($scope, $state, ProjectStore) {
+  app.controller("SettingsCtrl", function($scope, $state, ProjectStore, $translate,
+     $translateSanitization) {
 
     $scope.settings = ProjectStore.listSettings();
+    $scope.langDropdownIcon = "ion-chevron-up";
+    $scope.hideLang = true;
+
+
+    $scope.language = [
+      {lanTitle: 'English', value: 'en'},
+      {lanTitle: 'Espanol', value: 'es'}
+    ];
+
+    $scope.showLang = function() {
+      if ($scope.hideLang === true) {
+        $scope.hideLang = false;
+        $scope.langDropdownIcon = 'ion-chevron-down';
+      } else {
+        $scope.hideLang = true;
+        $scope.langDropdownIcon = 'ion-chevron-up';
+      }
+    };
+
+
 
     $scope.save = function() {
       ProjectStore.updateSettings($scope.settings);
+      $translate.use($scope.settings.language.value);
+      //console.log($translate.instant('start_tab'));
       $state.go('home');
     };
 
@@ -352,14 +531,14 @@
   });
 
 
-  app.controller("HomeCtrl", function($scope, $state, ProjectStore, $ionicPopup,
-    $interval, $cordovaLocalNotification, $cordovaToast) {
+  app.controller("HomeCtrl", function($scope, $state, $rootScope, ProjectStore, $ionicPopup,
+    $interval, $cordovaLocalNotification, $cordovaToast, $translate, $translateSanitization) {
 
     $scope.projects = ProjectStore.listTodo();
     $scope.allProjects = ProjectStore.list();
     $scope.settings = ProjectStore.listSettings();
-    $scope.pjtTitle = 'Start';
-    $scope.tskDescription = 'The forward button will complete the task. Click here or click the skip button to start';
+    $scope.pjtTitle = "";
+    $scope.tskDescription = "";
     $scope.addTimer = $scope.settings.StartingTimerNum;
     $scope.time = 0;
     $scope.seconds = 0;
@@ -378,6 +557,7 @@
     $scope.pastProjects = '';
     $scope.pastTasks = '';
 
+
     $scope.slider = {
       options: {
           floor: 0,
@@ -391,13 +571,36 @@
           translate: function(value) {
             return "";
           }
-      }
-  };
+        }
+    };
+
+    $scope.setLanguage = function () {
+      $translate('start_title')
+        .then(function (translatedValue) {
+            $scope.pjtTitle = translatedValue;
+            console.log(translatedValue);
+      });
+
+      $translate('start_tab')
+        .then(function (translatedValue) {
+            $scope.tskDescription = translatedValue;
+      });
+    };
+
+
+    $rootScope.$on('$stateChangeSuccess',
+      function(event, toState, toParams, fromState, fromParams, options){
+          event.preventDefault();
+          $scope.setLanguage();
+    });
+
+    $translate.use($scope.settings.language.value);
+    $scope.setLanguage();
+
 
     $scope.refreshSlider = function () {
       $scope.$broadcast('rzSliderForceRender');
     };
-
 
 
     var stop;
@@ -422,14 +625,14 @@
         templateUrl: 'templates/newtaskpopup.html',
         scope: $scope,
         buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
-           text: 'Cancel',
+           text: $translate.instant('cancel'),
            type: 'button-default',
            onTap: function(e) {
              // e.preventDefault() will stop the popup from closing when tapped.
 
            }
          }, {
-           text: 'OK',
+           text: $translate.instant('accept'),
            type: 'button-positive',
            onTap: function(e) {
              // Returning a value will cause the promise to resolve with the given value.
@@ -739,7 +942,6 @@
          }]
       })
     };
-
 
   });
 

@@ -1,14 +1,14 @@
-<ion-view view-title="Settings">
+<ion-view view-title="{{'settings_title' | translate}}">
   <ion-content class="padding card-padding" ng-controller="SettingsCtrl">
     <div class="card">
       <div class="item item-divider item-dark">
-        Editing
+        {{"settings_editing_title" | translate}}
       </div>
       <ion-list>
         <ion-item>
           <div class="row">
             <div class="col col-70">
-              Max timer limit (mins)
+              {{"settings_editing.max_timer" | translate}}
             </div>
             <div class="col col-30">
               <input class="item" type="number" ng-model="settings.maxSlider"></input>
@@ -18,7 +18,7 @@
         <ion-item>
           <div class="row">
             <div class="col col-70">
-              Starting Timer Value (mins)
+              {{"settings_editing.starting_timer" | translate}}
             </div>
             <div class="col col-30">
               <input class="item" type="number" ng-model="settings.StartingTimerNum"></input>
@@ -28,7 +28,7 @@
         <ion-item>
           <div class="row">
             <div class="col col-70">
-              Starting Blanks
+              {{"settings_editing.starting_blanks" | translate}}
             </div>
             <div class="col col-30">
               <input class="item" type="number" ng-model="settings.startingBlanks"></input>
@@ -36,7 +36,7 @@
           </div>
         </ion-item>
         <div class="item item-toggle">
-          Delete after use default
+          {{"settings_editing.delete_after" | translate}}
           <label class="toggle">
             <input type="checkbox" ng-model="settings.deleteAfter">
             <div class="track">
@@ -45,7 +45,7 @@
           </label>
         </div>
         <div class="item item-toggle">
-          Play in order default
+          {{"settings_editing.play_in_order" | translate}}
           <label class="toggle">
             <input type="checkbox" ng-model="settings.playInOrder">
             <div class="track">
@@ -57,11 +57,36 @@
     </div>
     <div class="card">
       <div class="item item-divider item-dark">
-        Notification
+        {{"settings_language_title" | translate}}
+      </div>
+      <ion-list>
+        <ion-item class="padding icon-right">
+          <div class="row" style="padding:0">
+            <div class="col col-90" style="padding:0">
+              {{"settings_language_subtitle" | translate}}: {{settings.language.lanTitle}}
+            </div>
+            <div class="col col-10" style="padding:0">
+              <button class="button button-icon" ng-class="langDropdownIcon"
+              style="font-size:200%" ng-click="showLang()"></button>
+            </div>
+          </div>
+        </ion-item>
+
+        <ion-item class="padding icon-right" ng-hide="hideLang" ng-repeat="x in language track by $index">
+            <ion-radio ng-model="settings.language" ng-value="x" ng-click="showLang();">{{x.lanTitle}}</ion-radio>
+        </ion-item>
+      </ion-list>
+
+
+
+    </div>
+    <div class="card">
+      <div class="item item-divider item-dark">
+        {{"settings_notification_title" | translate}}
       </div>
       <ion-list>
         <div class="item item-toggle">
-          Alarm notification
+          {{"settings_notification_alarm" | translate}}
           <label class="toggle">
             <input type="checkbox" ng-model="settings.sound">
             <div class="track">
@@ -71,6 +96,6 @@
         </div>
       </ion-list>
     </div>
-    <button class="button button-positive button-block" ng-click="save()">Save All</button>
+    <button class="button button-positive button-block" ng-click="save()">{{"settings_save_all" | translate}}</button>
   </ion-content>
 </ion-view>

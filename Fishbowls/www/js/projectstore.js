@@ -21,7 +21,8 @@ angular.module('fishbowls.projectstore', [])
     deleteAfter: false,
     playInOrder: true,
     vibrate: true,
-    sound: false
+    sound: false,
+    language: {lanTitle: 'English', value: 'en'}
   }
 
   if (JSON.parse(localStorage.getItem('settingsStorage')) === null) {

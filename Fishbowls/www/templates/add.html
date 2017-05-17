@@ -1,15 +1,15 @@
-<ion-view view-title="Add Project">
+<ion-view view-title="{{'add_project.add_project' | translate}}">
   <ion-content ng-controller="AddCtrl">
       <div class="list">
         <div class="item item-input">
-    				<input type="text" style="font-size:100%" ng-model="projectName" placeholder="Project Name">
+    				<input type="text" style="font-size:100%" ng-model="projectName" placeholder="{{'add_project.project_name' | translate}}">
         </div>
-    		<ion-checkbox class="item" ng-model="deleteAfter">Delete after use</ion-checkbox>
-        <ion-checkbox class="item" ng-model="checkMisc">Play tasks in order</ion-checkbox>
+    		<ion-checkbox class="item" ng-model="deleteAfter">{{"add_project.delete_after" | translate}}</ion-checkbox>
+        <ion-checkbox class="item" ng-model="checkMisc">{{"add_project.play_in_order" | translate}}</ion-checkbox>
         <div class="item">
           <ion-list show-reorder="reordering">
             <div class="item item-icon-right item-divider item-dark">
-              Micro tasks
+              {{"add_project.micro_task" | translate}}
               <i class="icon ion-drag" ng-click="toggleReordering()"></i>
             </div>
             <ion-item class="item" ng-repeat="x in project.tasks track by $index" on-hold="toggleReordering()">
@@ -31,9 +31,9 @@
             </ion-item>
 
             <div class="item card">
-              <input type="text" style="font-size:100%" ng-model="addMe" placeholder="Task Description">
+              <input type="text" style="font-size:100%" ng-model="addMe" placeholder="{{'add_project.task_description' | translate}}">
               <div class="item range range-positive">
-                  Time:<input type="range" ng-model="time" name="volume" min="0" max="{{settings.maxSlider}}" value="0">{{time}} Min
+                  {{"add_project.time" | translate}}:<input type="range" ng-model="time" name="volume" min="0" max="{{settings.maxSlider}}" value="0">{{time}} Min
               </div>
               <button class="button button-block button-positive" ng-click="addTask()">
                 {{boxButtonText}}
@@ -43,7 +43,7 @@
         </div>
       </div>
       <button class="button button-block button-positive" ng-click="save();addTask();">
-        Save All
+        {{"add_project.save_all" | translate}}
       </button>
   </ion-content>
 </ion-view>

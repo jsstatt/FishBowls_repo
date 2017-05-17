@@ -1,21 +1,27 @@
-<ion-view view-title="Settings">
+<ion-view view-title="{{'about' | translate}}">
   <ion-content class="padding card-padding" ng-controller="AboutCtrl">
     <div class="card">
       <div class="item item-divider">
-        About of fisBowls
+        {{"about_fishbowls" | translate}}
       </div>
       <div class="item item-text-wrap">
-          FishBowls is free thanks to Kickstarter and our generous backers.
+        {{"about_fishbowls_content" | translate}}
+        <br><br>
+        {{"concept" | translate}}
+        <a href="https://www.kickstarter.com/projects/475886624/fishbowls-free-adhd-micro-tasking-app-for-teens/description">{{"here" | translate}}</a>
+        <br><br>
+        Tutorial: <a href="https://www.youtube.com/watch?v=1jpbHNL_IAI">https://www.youtube.com/fishbowls</a>
       </div>
     </div>
     <div class="card">
       <div class="item item-divider">
-        Contacts
+        {{"contacts" | translate}}
       </div>
       <div class="list">
         <div class="item item-text-wrap">
           WebSite: <a href="https://www.highestfunction.org/">www.highestfunction.org</a>
         </div>
+
         <div class="item item-text-wrap">
           Email: <a href="">info@highestfunction.org</a>
         </div>
@@ -23,7 +29,7 @@
     </div>
     <div class="card">
       <div class="item item-divider">
-        Special Thanks
+        {{"special_thanks" | translate}}
       </div>
       <div class="item item-text-wrap">
           Diane Devaney, Judy Devaney, Julie Ryan, Mike Dominick, Stephen Elliott and Susan Geyer
